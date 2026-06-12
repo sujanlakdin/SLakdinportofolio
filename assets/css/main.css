@@ -1,16 +1,7 @@
-/**
-* Template Name: Craftivo
-* Template URL: https://bootstrapmade.com/craftivo-bootstrap-portfolio-template/
-* Updated: Oct 04 2025 with Bootstrap v5.3.8
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-*/
-
 @charset "UTF-8";
 
 /*--------------------------------------------------------------
 # Font & Color Variables
-# Help: https://bootstrapmade.com/color-system/
 --------------------------------------------------------------*/
 /* Fonts */
 :root {
@@ -5071,6 +5062,12 @@ section,
   background: linear-gradient(135deg, #001a00, #002200);
   color: #66bb6a;
   border-bottom: 2px solid rgba(102, 187, 106, 0.4);
+}
+
+.mongodb-cert {
+  background: linear-gradient(135deg, #001e12, #004d33);
+  color: #00ed64;
+  border-bottom: 2px solid rgba(0, 237, 100, 0.4);
 }
 
 /* ── Card body text area ── */
