@@ -239,7 +239,7 @@
                 <div class="section-tag">About Me</div>
                 <h2>Transforming Ideas into Digital Reality</h2>
                 <p>
-                  I am a passionate 2nd-year Information Technology
+                  I am a passionate 3rd-year Information Technology
                   undergraduate specializing in Information Technology at
                   SLIIT. I am driven by solving real-world problems through
                   clean code and effective system design. The projects in this
@@ -254,7 +254,7 @@
                   <i class="bi bi-briefcase"></i>
                   <div class="detail-content">
                     <span>Experience</span>
-                    <strong>Student Projects</strong>
+                    <strong>QA Intern</strong>
                   </div>
                 </div>
 
@@ -405,7 +405,9 @@
                 <div class="exp-card featured" data-aos="zoom-in" data-aos-delay="300">
                   <div class="card-header">
                     <div class="company-logo">
-                      <i class="bi bi-shield-check"></i>
+                      <a href="assets/img/ceylinco.jpeg" class="logo-lightbox-trigger" title="Ceylinco Life Logo">
+                        <img src="assets/img/ceylinco.jpeg" alt="Ceylinco Life Logo" />
+                      </a>
                     </div>
                     <div class="period-badge">Present</div>
                   </div>
@@ -436,8 +438,9 @@
                 <div class="exp-card" data-aos="zoom-in" data-aos-delay="350">
                   <div class="card-header">
                     <div class="company-logo">
-                      <!-- Icon for Corporate/Finance -->
-                      <i class="bi bi-bank"></i>
+                      <a href="assets/img/commercial-bank-logo.png" class="logo-lightbox-trigger" title="Commercial Bank of Ceylon Logo">
+                        <img src="assets/img/commercial-bank-logo.png" alt="Commercial Bank of Ceylon Logo" />
+                      </a>
                     </div>
 
                     <div class="period-badge">3 Months</div>
@@ -514,14 +517,13 @@
                         <span class="degree-level">Undergraduate</span>
                       </div>
                       <h4>
-                        B.Sc. Honours Degree in [Information Technology /
-                        Software Engineering]
+                        B.Sc. Honours Degree in Information Technology
                       </h4>
                       <p class="institution">
                         Sri Lanka Institute of Information Technology (SLIIT)
                       </p>
                       <p class="description">
-                        Currently in the 2nd year, focusing on core
+                        Currently in the 3rd year, focusing on core
                         programming (OOC/OOP), data structures, and database
                         management.
                       </p>
@@ -959,8 +961,8 @@
         <h2>My Technical Offerings</h2>
         <p>
           Highlights of my core technical and soft skills, primarily focused on the
-          practical application of knowledge gained during the first two years of my
-          IT degree at SLIIT.
+          practical application of knowledge gained during my academic journey
+          at SLIIT.
         </p>
       </div>
       <!-- End Section Title -->
@@ -1687,6 +1689,18 @@
       </div>
     </div>
 
+    <!-- ══ COMPANY LOGO LIGHTBOX MODAL ══ -->
+    <div class="logo-lightbox" id="logoLightbox">
+      <div class="logo-backdrop"></div>
+      <div class="logo-modal-content">
+        <button class="logo-close" id="closeLogoLightbox" aria-label="Close">
+          <i class="bi bi-x-lg"></i>
+        </button>
+        <img id="logoLightboxImage" src="" alt="Company Logo" />
+        <div id="logoLightboxCaption" class="logo-caption"></div>
+      </div>
+    </div>
+
   </main>
   <footer id="footer" class="footer">
     <div class="container footer-top">
@@ -1800,6 +1814,37 @@
       backdrop.addEventListener('click', closeLightbox);
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeLightbox();
+      });
+    })();
+
+    (function () {
+      const logoLightbox = document.getElementById('logoLightbox');
+      const logoImg = document.getElementById('logoLightboxImage');
+      const logoCaption = document.getElementById('logoLightboxCaption');
+      const closeLogoBtn = document.getElementById('closeLogoLightbox');
+      const logoBackdrop = logoLightbox.querySelector('.logo-backdrop');
+
+      document.querySelectorAll('.logo-lightbox-trigger').forEach(trigger => {
+        trigger.addEventListener('click', function(e) {
+          e.preventDefault();
+          const imgSrc = this.getAttribute('href');
+          const title = this.getAttribute('title');
+          logoImg.src = imgSrc;
+          logoCaption.textContent = title;
+          logoLightbox.classList.add('open');
+          document.body.style.overflow = 'hidden';
+        });
+      });
+
+      function closeLogoLightbox() {
+        logoLightbox.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      closeLogoBtn.addEventListener('click', closeLogoLightbox);
+      logoBackdrop.addEventListener('click', closeLogoLightbox);
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeLogoLightbox();
       });
     })();
   </script>
