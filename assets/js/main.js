@@ -228,9 +228,47 @@
   window.addEventListener('load', navmenuScrollspy);
   document.addEventListener('scroll', navmenuScrollspy);
 
+  /**
+   * 3D Flip Card Mobile Touch Interactivity
+   */
+  function initFlipCardInteractivity() {
+    const flipCardInners = document.querySelectorAll('.flip-card-inner');
 
+    flipCardInners.forEach(inner => {
+      inner.addEventListener('click', (e) => {
+        // Prevent click events inside the back-side links/buttons from toggling the flip
+        if (e.target.closest('a') || e.target.closest('button')) {
+          return;
+        }
 
+        const isFlipped = inner.classList.contains('flipped');
+        
+        // Reset all other cards to prevent multi-card flip clutter
+        flipCardInners.forEach(otherInner => {
+          if (otherInner !== inner) {
+            otherInner.classList.remove('flipped');
+          }
+        });
 
+        // Toggle this card
+        if (isFlipped) {
+          inner.classList.remove('flipped');
+        } else {
+          inner.classList.add('flipped');
+        }
 
-  
+        e.stopPropagation();
+      });
+    });
+
+    // Tap outside to flip cards back to front
+    document.addEventListener('click', () => {
+      flipCardInners.forEach(inner => {
+        inner.classList.remove('flipped');
+      });
+    });
+  }
+
+  window.addEventListener('load', initFlipCardInteractivity);
+
 })();

@@ -4351,3 +4351,384 @@ section,
   font-weight: 500;
   text-align: center;
 }
+
+/* =========================================
+   3D FLIP CARDS GRID FOR COMPETENCIES
+   ========================================= */
+
+.flip-card {
+  background-color: transparent;
+  width: 100%;
+  height: 290px; /* Lock height for uniform rhythm */
+  perspective: 1000px; /* 3D effect space */
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+/* Hover flip trigger for desktop, plus manual flipped toggle class for mobile */
+.flip-card:hover .flip-card-inner,
+.flip-card-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 77, 79, 0.15) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Front Face */
+.flip-card-front {
+  background: rgba(20, 20, 25, 0.75) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+  z-index: 2;
+}
+
+.flip-card-front h4 {
+  font-size: 19px !important;
+  font-weight: 700 !important;
+  margin-top: 18px !important;
+  margin-bottom: 8px !important;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+}
+
+/* Hint at the bottom of front face */
+.flip-hint {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.25);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Back Face */
+.flip-card-back {
+  background: rgba(15, 15, 20, 0.95) !important;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 25px;
+  z-index: 1;
+  text-align: center;
+}
+
+.flip-card-back p {
+  color: #d1d1d6 !important;
+  font-size: 14.5px !important;
+  line-height: 1.6 !important;
+  margin-bottom: 20px !important;
+}
+
+.flip-card-back .read-more {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600 !important;
+  color: var(--accent-color) !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  margin-top: auto;
+}
+
+.flip-card-back .read-more:hover {
+  color: #fff !important;
+  transform: translateX(3px);
+}
+
+/* Custom glow matching each planet's theme on front card hover */
+.flip-card:hover .flip-card-front {
+  border-color: rgba(255, 77, 79, 0.4) !important;
+  box-shadow: 0 15px 40px rgba(255, 77, 79, 0.25) !important;
+}
+
+/* Planet nodes container inside front card */
+.card-planet-container {
+  width: 90px;
+  height: 90px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+/* -----------------------------------------
+   Planet Spheres and Animation Base Classes
+   ----------------------------------------- */
+.planet-node {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100% !important;
+  height: 100% !important;
+  cursor: default;
+}
+
+.planet-node::before {
+  display: none !important; /* Hide extra dashed orbit outer ring inside grid cards */
+}
+
+.planet-sphere {
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: inset -8px -8px 20px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 255, 255, 0.1);
+  transform: translateZ(0);
+  width: 100%;
+  height: 100%;
+  transition: all 0.4s ease;
+}
+
+.planet-sphere::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, transparent 10%, rgba(0, 0, 0, 0.45) 45%, rgba(0, 0, 0, 0.95) 85%, rgba(0, 0, 0, 1) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.planet-surface {
+  position: absolute;
+  top: 0; left: 0;
+  width: 200%; height: 100%;
+  background-size: 50% 100%;
+  animation: rotatePlanet 16s linear infinite;
+  z-index: 1;
+}
+
+@keyframes rotatePlanet {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* -----------------------------------------
+   Custom Planet Gradients and Specifics
+   ----------------------------------------- */
+
+/* 0. OOP: Sun */
+.card-planet-container .planet-sun {
+  width: 75px !important;
+  height: 75px !important;
+}
+.planet-sun .planet-sphere {
+  box-shadow: 0 0 25px rgba(255, 85, 0, 0.6), inset -6px -6px 15px rgba(0, 0, 0, 0.5);
+  animation: sunGlow 3s infinite alternate ease-in-out;
+}
+.planet-sun .planet-surface {
+  background: linear-gradient(90deg, #ffdd00 0%, #ff6600 25%, #ff3300 50%, #ffaa00 75%, #ffdd00 100%);
+}
+@keyframes sunGlow {
+  0% { box-shadow: 0 0 20px rgba(255, 68, 0, 0.6), 0 0 40px rgba(255, 170, 0, 0.3), inset -5px -5px 12px rgba(0, 0, 0, 0.5); }
+  100% { box-shadow: 0 0 35px rgba(255, 68, 0, 0.9), 0 0 60px rgba(255, 170, 0, 0.6), inset -5px -5px 12px rgba(0, 0, 0, 0.5); }
+}
+
+/* 1. Database: Mercury */
+.card-planet-container .planet-mercury {
+  width: 40px !important;
+  height: 40px !important;
+}
+.planet-mercury .planet-sphere {
+  box-shadow: inset -4px -4px 10px rgba(0, 0, 0, 0.8), 0 0 8px rgba(180, 180, 180, 0.3);
+}
+.planet-mercury .planet-surface {
+  background: linear-gradient(90deg, #8c8c8c 0%, #595959 25%, #a6a6a6 50%, #737373 75%, #8c8c8c 100%);
+}
+
+/* 2. Web: Venus */
+.card-planet-container .planet-venus {
+  width: 52px !important;
+  height: 52px !important;
+}
+.planet-venus .planet-sphere {
+  box-shadow: inset -5px -5px 12px rgba(0, 0, 0, 0.8), 0 0 10px rgba(230, 184, 0, 0.3);
+}
+.planet-venus .planet-surface {
+  background: linear-gradient(90deg, #e6b800 0%, #b38600 25%, #ffd633 50%, #cc9900 75%, #e6b800 100%);
+  animation-direction: reverse;
+}
+
+/* 3. Problem Solving: Earth */
+.card-planet-container .planet-earth {
+  width: 55px !important;
+  height: 55px !important;
+}
+.planet-earth .planet-sphere {
+  box-shadow: inset -6px -6px 15px rgba(0, 0, 0, 0.8), 0 0 15px rgba(77, 166, 255, 0.4);
+}
+.planet-earth .planet-surface {
+  background: linear-gradient(90deg, #4da6ff 0%, #0066cc 20%, #2eb82e 35%, #0066cc 55%, #1f7a1f 70%, #4da6ff 100%);
+}
+.card-planet-container .planet-earth .moon-orbit {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  pointer-events: none;
+  z-index: 6;
+}
+.card-planet-container .planet-earth .moon-body {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: #cccccc;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  margin-top: -3.5px;
+  margin-left: -3.5px;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+  animation: orbitTheMoonCard 8s linear infinite;
+}
+@keyframes orbitTheMoonCard {
+  0% { transform: rotate(0deg) translateX(42px) rotate(0deg); z-index: -1; }
+  50% { transform: rotate(180deg) translateX(42px) rotate(-180deg); z-index: 3; }
+  100% { transform: rotate(360deg) translateX(42px) rotate(-360deg); z-index: -1; }
+}
+
+/* 4. Git: Mars */
+.card-planet-container .planet-mars {
+  width: 48px !important;
+  height: 48px !important;
+}
+.planet-mars .planet-sphere {
+  box-shadow: inset -5px -5px 12px rgba(0, 0, 0, 0.8), 0 0 10px rgba(255, 77, 79, 0.4);
+}
+.planet-mars .planet-surface {
+  background: linear-gradient(90deg, #ff6666 0%, #b32400 30%, #ff4d4d 60%, #801a00 85%, #ff6666 100%);
+}
+
+/* 5. Testing: Jupiter */
+.card-planet-container .planet-jupiter {
+  width: 72px !important;
+  height: 72px !important;
+}
+.planet-jupiter .planet-sphere {
+  box-shadow: inset -7px -7px 18px rgba(0, 0, 0, 0.8), 0 0 15px rgba(212, 140, 80, 0.4);
+}
+.planet-jupiter .planet-surface {
+  background: repeating-linear-gradient(180deg, #cc6633 0px, #cc6633 6px, #ffd1b3 6px, #ffd1b3 12px, #994d00 12px, #994d00 18px, #ffb380 18px, #ffb380 24px);
+}
+
+/* 6. Documentation: Saturn */
+.card-planet-container .planet-saturn {
+  width: 58px !important;
+  height: 58px !important;
+}
+.planet-saturn .planet-sphere {
+  box-shadow: inset -6px -6px 15px rgba(0, 0, 0, 0.8), 0 0 12px rgba(212, 178, 111, 0.3);
+}
+.planet-saturn .planet-surface {
+  background: linear-gradient(90deg, #d4b26f 0%, #997d4d 25%, #e6cc99 50%, #b3925c 75%, #d4b26f 100%);
+}
+.card-planet-container .saturn-ring-back,
+.card-planet-container .saturn-ring-front {
+  position: absolute;
+  width: 105px;
+  height: 30px;
+  border: 6px double rgba(212, 178, 111, 0.6);
+  border-radius: 50%;
+  transform: rotate(-15deg) rotateX(75deg);
+  pointer-events: none;
+}
+.card-planet-container .saturn-ring-back {
+  z-index: 0;
+}
+.card-planet-container .saturn-ring-front {
+  z-index: 3;
+  clip-path: inset(50% 0 0 0);
+}
+
+/* 7. IT Support: Uranus */
+.card-planet-container .planet-uranus {
+  width: 54px !important;
+  height: 54px !important;
+}
+.planet-uranus .planet-sphere {
+  box-shadow: inset -6px -6px 15px rgba(0, 0, 0, 0.8), 0 0 12px rgba(100, 220, 220, 0.4);
+}
+.planet-uranus .planet-surface {
+  background: linear-gradient(90deg, #a6f2f2 0%, #33b2b2 30%, #7aebeb 60%, #207373 85%, #a6f2f2 100%);
+}
+.card-planet-container .uranus-ring-back,
+.card-planet-container .uranus-ring-front {
+  position: absolute;
+  width: 85px;
+  height: 24px;
+  border: 3px solid rgba(150, 240, 240, 0.4);
+  border-radius: 50%;
+  transform: rotate(80deg) rotateX(75deg);
+  pointer-events: none;
+}
+.card-planet-container .uranus-ring-back {
+  z-index: 0;
+}
+.card-planet-container .uranus-ring-front {
+  z-index: 3;
+  clip-path: inset(0 0 0 50%);
+}
+
+/* 8. Mobile: Neptune */
+.card-planet-container .planet-neptune {
+  width: 52px !important;
+  height: 52px !important;
+}
+.planet-neptune .planet-sphere {
+  box-shadow: inset -5px -5px 12px rgba(0, 0, 0, 0.8), 0 0 12px rgba(0, 85, 255, 0.4);
+}
+.planet-neptune .planet-surface {
+  background: linear-gradient(90deg, #3377ff 0%, #003399 25%, #6699ff 50%, #002266 75%, #3377ff 100%);
+}
+
+/* Featured tag for Core Skill inside flip card */
+.flip-card .featured-tag {
+  position: absolute;
+  top: 15px;
+  right: -30px;
+  background: var(--accent-color);
+  color: var(--contrast-color);
+  padding: 4px 30px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transform: rotate(45deg);
+  box-shadow: 0 3px 8px rgba(255, 77, 79, 0.3);
+  z-index: 5;
+}
